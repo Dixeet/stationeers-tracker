@@ -73,15 +73,21 @@ html {
     justify-content: flex-start;
     align-items: flex-start;
     align-content: flex-start;
+    background-color: #dce9eb;
     /*background-color: lightgrey;*/
 }
 
-.grid {
+.tile {
     position: absolute;
     /*border: 1px solid black;*/
     width: 20px;
     height: 20px;
-    color: grey;
+    /*background: repeating-linear-gradient(45deg, blue, blue 5px, yellow 5px, yellow 10px, red 10px, red 15px);*/
+    /*background: repeating-linear-gradient(45deg, blue, blue 5px);*/
+}
+
+.draging {
+    cursor: grabbing;
 }
 
 .beacon {

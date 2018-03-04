@@ -32,6 +32,7 @@
             el = dragged[i++];
             el = el.container || el;
             el[removeEventListener](mousedown, el.md, 0);
+            el[removeEventListener]('contextmenu', el.cm, 0);
             _window[removeEventListener](mouseup, el.mu, 0);
             _window[removeEventListener](mousemove, el.mm, 0);
         }
@@ -43,22 +44,37 @@
                 (cont = el.container || el)[addEventListener](
                     mousedown,
                     cont.md = function(e) {
-                        if (!el.hasAttribute('nochilddrag') ||
-                            _document.elementFromPoint(
-                                e.pageX, e.pageY
-                            ) == cont
-                        ) {
-                            pushed = 1;
-                            lastClientX = e.clientX;
-                            lastClientY = e.clientY;
+                        if(e.which === 3) {
+                            cont.className += ' draging';
+                            if (!el.hasAttribute('nochilddrag') ||
+                                _document.elementFromPoint(
+                                    e.pageX, e.pageY
+                                ) == cont
+                            ) {
+                                pushed = 1;
+                                lastClientX = e.clientX;
+                                lastClientY = e.clientY;
 
-                            e.preventDefault();
+                                e.preventDefault();
+                            }
+                            return false;
                         }
+                    }, 0
+                );
+                (cont = el.container || el)[addEventListener](
+                    'contextmenu',
+                    cont.cm = function(e) {
+                        e.preventDefault();
+                        return false;
                     }, 0
                 );
 
                 _window[addEventListener](
-                    mouseup, cont.mu = function() {pushed = 0;}, 0
+                    mouseup, cont.mu = function()
+                    {
+                        cont.className = cont.className.replace('draging','') ;
+                        pushed = 0;
+                    }, 0
                 );
 
                 _window[addEventListener](
