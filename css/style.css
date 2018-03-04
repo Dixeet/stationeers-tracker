@@ -1,0 +1,86 @@
+/* Settings */
+:root {
+    --offset: 0;
+    --max_width: 100%;
+    --columns: 1;
+    --gutter: 0rem;
+    --baseline: 20px;
+    --baseline-offset: 0rem;
+    --color: hsla(270, 26%, 93%, 0.25);
+}
+
+/* Helper variables */
+:root {
+    --repeating-width: calc(100% / var(--columns));
+    --column-width: calc((100% / var(--columns)) - var(--gutter));
+    --background-width: calc(100% + var(--gutter));
+    --background-columns: repeating-linear-gradient(
+            to right,
+            var(--color),
+            var(--color) var(--column-width),
+            transparent var(--column-width),
+            transparent var(--repeating-width)
+    );
+    --background-baseline: repeating-linear-gradient(
+            to bottom,
+            black,
+            var(--color) 1px,
+            transparent 1px,
+            transparent var(--baseline)
+    );
+    --background-right: repeating-linear-gradient(
+            to right,
+            black,
+            var(--color) 1px,
+            transparent 1px,
+            transparent var(--baseline)
+    );
+}
+
+/* Styling */
+
+html {
+    position: relative;
+}
+
+#map::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    width: calc(100% - (2 * var(--offset)));
+    /*max-width: var(--max_width);*/
+    /*min-height: 100vh;*/
+    content: '';
+    background-image: var(--background-columns), var(--background-baseline), var(--background-right);
+    background-size: 100% 100%;
+    background-position: 0 var(--baseline-offset);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#map {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    /*background-color: lightgrey;*/
+}
+
+.grid {
+    position: absolute;
+    /*border: 1px solid black;*/
+    width: 20px;
+    height: 20px;
+    color: grey;
+}
+
