@@ -10,7 +10,7 @@ This tool will allow you to track the ores veins that you have found on your min
 
 ## Beacon setup
 You will need 3 beacons to be geolocate.
-Put 3 frames like this :
+Put 3 frames side by side like this :
 
 ```
       North
