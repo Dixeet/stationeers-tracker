@@ -84,3 +84,15 @@ html {
     color: grey;
 }
 
+.beacon {
+    background-color: rgba(186, 19, 50, 0.48);
+}
+
+.home {
+    background-color: crimson;
+}
+
+.red {
+    background-color: red;
+}
+

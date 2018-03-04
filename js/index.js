@@ -1,7 +1,7 @@
 (function (window, $) {
     var gridSizeMeter = 2;
     var gridSizePx = 20;
-    var WantedMapSideSizeMeter = 50;
+    var WantedMapSideSizeMeter = 500;
     var gridSideCount,
         centerOfGridPx,
         centerOfGridMeter,
@@ -15,8 +15,9 @@
         calculateDimension();
         constructMap();
         setHome();
-        var coordinates = findCoordinatesMeter(8.94427191, 7.211102551, 8.246211251);
-        insertGridRelativeToCenterMeter(coordinates.x, coordinates.y, 'red');
+        // var coordinates = findCoordinatesMeter(4, 4.472135955, 6);
+        // console.log(coordinates);
+        // insertGridRelativeToCenterMeter(coordinates.x, coordinates.y, ['red']);
     }
 
     function calculateDimension() {
@@ -33,9 +34,19 @@
 
     function findCoordinatesMeter(originBeacon, northBeacon, eastBeacon) {
         return {
-            x: -(originBeacon * originBeacon - northBeacon * northBeacon + 4) / 4,
-            y: (originBeacon * originBeacon - eastBeacon * eastBeacon + 4) / 4
+            x: (originBeacon * originBeacon - eastBeacon * eastBeacon + 4) / 4,
+            y: (originBeacon * originBeacon - northBeacon * northBeacon + 4) / 4
         }
+    }
+
+    function moveCenterTo(x, y) {
+        var X = x - $(window).width() / 2;
+        var Y = y - $(window).height() / 2;
+        window.scrollTo(X, Y);
+    }
+
+    function moveCenterToMeter(x , y) {
+        moveCenterTo(mToPx(x), mToPx(y));
     }
 
     function mToPx(meters) {
@@ -54,26 +65,30 @@
     }
 
     function setHome() {
-        insertGridToPx(centerOfGridPx, centerOfGridPx);
+        insertGridToPx(centerOfGridPx, centerOfGridPx, ['home']);
+        insertGridToPx(centerOfGridPx + gridSizePx, centerOfGridPx, ['beacon']);
+        // insertGridToPx(centerOfGridPx, centerOfGridPx - gridSizePx, ['beacon']);
+        insertGridRelativeToCenterMeter(0, 2, ['beacon']);
+        moveCenterTo(centerOfGridPx, centerOfGridPx);
     }
 
-    function insertGridRelativeToCenterMeter(xMC, yMC, color){
+    function insertGridRelativeToCenterMeter(xMC, yMC, cssClass, gridEl){
         var x = mToPx(relativeToMapMeter(xMC));
-        var y = mToPx(relativeToMapMeter(yMC));
-        insertGridToPx(x, y, color);
+        var y = mToPx(relativeToMapMeter(-yMC));
+        insertGridToPx(x, y, cssClass, gridEl);
     }
 
-    function insertGridToPx(x, y, color, gridEl) {
+    function insertGridToPx(x, y, cssClass, gridEl) {
         var X = typeof x === 'undefined' ? 0 : Math.floor(x / gridSizePx) * gridSizePx;
         var Y = typeof y === 'undefined' ? 0 : Math.floor(y / gridSizePx) * gridSizePx;
         gridEl = !!gridEl ? gridEl : baseGridEl;
-        color = !!color ? color : 'grey';
-        $home = $(baseGridEl);
-        $home.css('top', X);
-        $home.css('left', Y);
-        if (gridEl === baseGridEl) {
-            $home.css('background-color', color);
-        }
+        cssClass = !!cssClass ? cssClass : [];
+        $home = $(gridEl);
+        $home.css('left', X);
+        $home.css('top', Y);
+        cssClass.forEach(function(css){
+            $home.addClass(css);
+        });
         $map.append($home);
     }
 })(window, window.jQuery);
