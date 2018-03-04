@@ -1,7 +1,9 @@
 (function (window, $) {
+
     /*
         Script Variable
     */
+
     var tileSizeMeter = 2;
     var tileSizePx = 20;
     var WantedMapSideSizeMeter = 500;
@@ -31,6 +33,7 @@
     /*
         OnReady
     */
+
     $(init);
 
     function init() {
@@ -44,6 +47,7 @@
     /*
         Steps
     */
+
     function calculateDimension() {
         tileSideCount = Math.round(WantedMapSideSizeMeter / tileSizeMeter) % 2 === 0 ?
             Math.round(WantedMapSideSizeMeter / tileSizeMeter) + 1 : Math.round(WantedMapSideSizeMeter / tileSizeMeter);
@@ -66,8 +70,6 @@
         var i = 0;
         Object.keys(colors).forEach(function (color) {
             if (color != 'origin' && color != 'beacon'){
-                console.log(color);
-
                 insertTileRelativeToCenterMeter(i*2, 6, [colors[color]]);
                 i++
             }
@@ -75,52 +77,13 @@
         moveCenterToRelativeCenterMeter(0, 0);
     }
 
+
     /*
-        Functions
+        Functions Interact
     */
-    function relativeToMapMeter(x) {
-        return x + centerOfGridMeter;
-    }
 
-    function findCoordinatesMeter(originBeacon, northBeacon, eastBeacon) {
-        return {
-            x: (originBeacon * originBeacon - eastBeacon * eastBeacon + 4) / 4,
-            y: (originBeacon * originBeacon - northBeacon * northBeacon + 4) / 4
-        }
-    }
-
-    function moveCenterToPx(x, y) {
-        var X = x - $(window).width() / 2;
-        var Y = y - $(window).height() / 2;
-        window.scrollTo(X, Y);
-    }
-
-    function moveCenterToRelativeCenterMeter(x , y) {
-        moveCenterToPx(mToPx(relativeToMapMeter(x)), mToPx(relativeToMapMeter(y)));
-    }
-
-    function mToPx(meters) {
-        return meters * tileSizePx / tileSizeMeter;
-    }
-
-    function pxToM(pixels) {
-        return pixels * tileSizeMeter / tileSizePx;
-    }
-
-    function insertTileRelativeToCenterMeter(xMC, yMC, cssClass, tileEl){
-        var x = mToPx(relativeToMapMeter(xMC));
-        var y = mToPx(relativeToMapMeter(-yMC));
-        insertTileToPx(x, y, cssClass, tileEl);
-    }
-
-    function repeatingLinearGradientString(colors) {
-        var str = 'repeating-linear-gradient(45deg';
-        var stripeWidth = 5;
-        colors.forEach(function (color, index) {
-            str += ', ' + color + ' ' + index * stripeWidth + 'px, ' + color  + ' ' + (index + 1) * stripeWidth + 'px';
-        });
-        str += ')';
-        return str;
+    function addOresToPx(x, y, ores) {
+        // var X =
     }
 
     function insertTileToPx(x, y, colors, tileEl) {
@@ -136,4 +99,63 @@
         }
         $map.append($home);
     }
+
+    function insertTileRelativeToCenterMeter(xMC, yMC, cssClass, tileEl){
+        var x = mToPx(relativeToMapMeter(xMC));
+        var y = mToPx(relativeToMapMeter(-yMC));
+        insertTileToPx(x, y, cssClass, tileEl);
+    }
+
+
+    /*
+        Functions Moves
+    */
+
+    function moveCenterToPx(x, y) {
+        var X = x - $(window).width() / 2;
+        var Y = y - $(window).height() / 2;
+        window.scrollTo(X, Y);
+    }
+
+    function moveCenterToRelativeCenterMeter(x , y) {
+        moveCenterToPx(mToPx(relativeToMapMeter(x)), mToPx(relativeToMapMeter(y)));
+    }
+
+    /*
+        Functions Calculs
+    */
+
+    function relativeToMapMeter(x) {
+        return x + centerOfGridMeter;
+    }
+
+    function relativeToCenterMeter(x) {
+        return x - centerOfGridMeter;
+    }
+
+    function mToPx(meters) {
+        return meters * tileSizePx / tileSizeMeter;
+    }
+
+    function pxToM(pixels) {
+        return pixels * tileSizeMeter / tileSizePx;
+    }
+
+    function repeatingLinearGradientString(colors) {
+        var str = 'repeating-linear-gradient(45deg';
+        var stripeWidth = 5;
+        colors.forEach(function (color, index) {
+            str += ', ' + color + ' ' + index * stripeWidth + 'px, ' + color  + ' ' + (index + 1) * stripeWidth + 'px';
+        });
+        str += ')';
+        return str;
+    }
+
+    function findCoordinatesMeter(originBeacon, northBeacon, eastBeacon) {
+        return {
+            x: (originBeacon * originBeacon - eastBeacon * eastBeacon + 4) / 4,
+            y: (originBeacon * originBeacon - northBeacon * northBeacon + 4) / 4
+        }
+    }
+
 })(window, window.jQuery);
