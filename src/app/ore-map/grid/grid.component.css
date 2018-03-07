@@ -1,0 +1,28 @@
+.map-container {
+    /*max-width: 100vw;*/
+    /*max-height: 100vh;*/
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    /*margin: 50px 0 0 203px;*/
+}
+
+.grid {
+    background: repeating-linear-gradient(45deg, blue, blue 30%, red, red 100%);
+    width: 500px;
+    height: 500px;
+    position: relative;
+}
+
+.center {
+    position: absolute;
+    top: 245px;
+    left: 245px;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+}
+
+.dragging {
+    cursor: grabbing;
+}
