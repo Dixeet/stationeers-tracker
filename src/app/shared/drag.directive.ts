@@ -39,16 +39,6 @@ export class DragDirective {
     this.moveCenterTo(this.domElement.scrollWidth / 2, this.domElement.scrollHeight / 2);
   }
 
-  ngAfterViewInit() {
-    this.subscribeToContextMenu();
-    this.subscribeToMouseDown();
-  }
-
-  ngOnDestroy() {
-    this.unsubscribeContextMenu();
-    this.unsubscribeMouseDown();
-  }
-
   public resetPosition() {
     this.positionState = {
       currentPosY: 0,
@@ -57,6 +47,25 @@ export class DragDirective {
       startingCursorX: 0
     };
   }
+
+  ngAfterViewInit() {
+    if (this.isScrollable()) {
+      this.subscribeToContextMenu();
+      this.subscribeToMouseDown();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.isScrollable()) {
+      this.unsubscribeContextMenu();
+      this.unsubscribeMouseDown();
+    }
+  }
+
+  private isScrollable() {
+    return this.domElement.clientWidth < this.domElement.scrollWidth && this.domElement.clientHeight < this.domElement.scrollHeight;
+  }
+
 
   private setCurrentPosition(x, y) {
     this.positionState.currentPosX = x;
